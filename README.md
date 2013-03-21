@@ -110,7 +110,7 @@ This will auto load into the DIV with the url content after $().compile.
 > > *target:id, #target div id  
 > > *type:'url'|'iframe'|'div' #load from url or div? default:url  
 > > *href:url, #if type is url  
-> > title:'title' #dialog title, default <a>text  
+> > title:'title' #dialog title, default is element context  
 > > dwidth:width #default is auto  
 > > dheight:height #default is auto  
 > > resizable:true  
@@ -123,7 +123,7 @@ This will auto load into the DIV with the url content after $().compile.
 > > *href:url  
 > > target:"#id" #if target id is not null,will write back the json.info result  
 > > method:'POST'|'GET' #default is 'POST'  
-> > data:data, //post data  
+> > data:data, #post data  
 > > prepare:"preparefunction()"  
 > > callback:"callbackfunction(json)"  
 > 
@@ -134,8 +134,8 @@ This will auto load into the DIV with the url content after $().compile.
 > `a.div` #click to load URL content into DIV  
 > > *href:url  
 > > *target:"#id"  
-> > append:false  # true:append to the end;false: empty the div  
-> > ask:'tips'  # if div is not empty, it will alert a tips  
+> > append:false  #true:append to the end;false: empty the div  
+> > ask:'tips'  #if div is not empty, it will alert a tips  
 > > prepare:"preparefunction()"  
 > > callback:"callbackfunction(json)"  
 > 
