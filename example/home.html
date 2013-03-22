@@ -1,0 +1,198 @@
+<article class="markdown-body entry-content" itemprop="mainContentOfPage"><h1>
+<a name="webex-is-a-html-interface-jquery--plugin" class="anchor" href="#webex-is-a-html-interface-jquery--plugin"><span class="mini-icon mini-icon-link"></span></a>Webex is a HTML interface jQuery  plugin</h1>
+
+<p>This framework depends on jQuery 1.4+, only need to run <code>$('body').compile()</code> to take effects. DOM elements includes class attribution like <code>.ajax</code> or <code>.load</code> or <code>.dialog</code>  and so on will auto trigger ajax post, ajax load(auto cross-domain) or show dialog... That's a comfort way to make one webpage ajaxable.</p>
+
+<h2>
+<a name="compilejs" class="anchor" href="#compilejs"><span class="mini-icon mini-icon-link"></span></a>compile.js</h2>
+
+<p>The core js is compile.js, all funtions is in the <code>$.webex</code> scope.</p>
+
+<p>If you need float dialog, the frame invoked a third party dialog for default
+<a href="https://github.com/aui/artDialog">https://github.com/aui/artDialog</a> (version 4.0+)</p>
+
+<p>If you need to use you own dialog, please overload the funtions <code>$.webex.CreateDialog</code> and <code>$.webex.CloseDialog</code></p>
+
+<p>If you need ajax crossdomain, you can replace the jqeury ajax $.ajax with $.webex.ajax and replace $.load with $.ajaxload, and put jsonp.php on your server(only for php server nowaday, or you can write an jsonp server yourself). $.webex.ajax will auto detect your request domain whether cross or not.</p>
+
+<h2>
+<a name="webex-scope-structure" class="anchor" href="#webex-scope-structure"><span class="mini-icon mini-icon-link"></span></a>$.webex scope structure</h2>
+
+<p><code>$.webex.setting</code> basic global settings
+<code>$.webex.action</code> json back action scope
+<code>$.webex.util</code> common utilities</p>
+
+<h2>
+<a name="webex-functions-and-consts" class="anchor" href="#webex-functions-and-consts"><span class="mini-icon mini-icon-link"></span></a>$.webex functions and consts</h2>
+
+<h3>
+<a name="bigpu" class="anchor" href="#bigpu"><span class="mini-icon mini-icon-link"></span></a>$.bigpu.</h3>
+
+<blockquote>
+<p>alert('message',expired=5000)<br>
+CreateDialog('html'|'url'|'iframe',{''}|{'url'},title,width='auto',height='auto',multi=false,resizable=false,buttonok,buttoncancel)<br>
+ajax(url,'POST'|'GET',data="string"|{object},expired,callback="string"|function(json))<br>
+cookie(name, [value], [options])  </p>
+
+<p>setting.  </p>
+
+<blockquote>
+<p>autocompile:false #whether to auto $('body').compile() or not<br>
+crossdomainserver:'<a href="http://www.yourdomain.com/jsonp.php">http://www.yourdomain.com/jsonp.php</a>' #jsonp cross domain server<br>
+LastDialogHandle:handle #pop dialog handle,iframe use the parent to close  </p>
+</blockquote>
+
+<p>action.  </p>
+
+<blockquote>
+<p>script(json) #on json.status==1 trigger json.script<br>
+redirect(json) #show prompt json.info redirect to json.jumpUrl delay by json.delay*1000<br>
+success(json) #show prompt json.info then redirect to json.jumpUrl if url exists<br>
+error(json) //show prompt json.info then redirect to json.jumpUrl if url exists.
+reload(json)  //show prompt json.info for 5s if exists then reload.</p>
+</blockquote>
+
+<p>util.  </p>
+
+<blockquote>
+<p>toJSON(json_string) #return json object<br>
+isIE6()<br>
+isIOS()<br>
+fixOrientZoom()<br>
+substring4ChAndEn(str,length)<br>
+ellipse(str,length)<br>
+isEmpty(str)<br>
+isEmail(str)<br>
+isNick(str)<br>
+noLink(str)<br>
+getPosition(Element)<br>
+getDomain(urlstr)<br>
+selectall(input[name],'#checkbox_id')<br>
+submitByEnter(e,callback)<br>
+goTop()<br>
+JsonAction(data) #json back to call $.webex.action,the callback name declare in json.data.action<br>
+getAbsUrl(url)<br>
+crc32(string)<br>
+base64_encode(str)<br>
+base64_decode(str)<br>
+regularTimestamp(timestamp, nowtime=Date(), isNormal=false, showtime=false)
+setHomePage(obj,url)<br>
+addBookmark(title,url)<br>
+copyToClipboard(txt)  </p>
+</blockquote>
+</blockquote>
+
+<p>for scope to take effects:<br><code>$('#selector').compile()</code> 
+to turn off effects:
+   <code>$('#selector').uncompile()</code><br>
+all the server back ajax format must like:  </p>
+
+<pre><code>{
+    status: 1,
+    info: 'back tips',
+    data: 'back data'
+}
+</code></pre>
+
+<h2>
+<a name="html-element-usage" class="anchor" href="#html-element-usage"><span class="mini-icon mini-icon-link"></span></a>HTML Element usage:</h2>
+
+<p>the form below <code>form.ajax</code> is the jquery selector, means <code>&lt;form class="ajax"&gt;</code>, the param tagged '*' is required DOM attribution in the same Element. 
+Example:</p>
+
+<div class="highlight"><pre><span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">"load"</span> <span class="na">url=</span><span class="s">"http://www.domain.com/a.html"</span><span class="nt">&gt;&lt;/div&gt;</span>
+</pre></div>
+
+<p>This will auto load into the DIV with the url content after $().compile.  </p>
+
+<blockquote>
+<p><code>form.ajax</code> use ajax to post instead of redirect  </p>
+
+<blockquote>
+<p>prepare:function, #for validate,submit will break if return false<br>
+valid:'false', #submit will break if val(false)<br>
+callback:function, #for callback(json)<br>
+ajaxmsg:'.class|#id' #the target div will show the submiting tips<br>
+inner form: <code>&lt;input:submit&gt;</code>  </p>
+
+<blockquote>
+<p>sync:'message',#on submiting the button title will be changed and submit button disabled, after success will restore  </p>
+</blockquote>
+</blockquote>
+
+<p><code>div.load</code>  load url content after document is loaded, support different domain  </p>
+
+<blockquote>
+<p>*url:url<br>
+callback:function, #ex: <code>&lt;div class="load" url="http://domain.com" callback="cb(data)"&gt;&lt;/div&gt;</code>  </p>
+</blockquote>
+
+<p><code>div.loadswf</code> #embed flash into div </p>
+
+<blockquote>
+<p>*url:url<br>
+*width:width<br>
+*height:height<br>
+flashvars:flashvars&amp;..<br>
+params:params&amp;..  </p>
+</blockquote>
+
+<p><code>a.dialog</code> #click to show dialog  </p>
+
+<blockquote>
+<p>*target:id, #target div id<br>
+*type:'url'|'iframe'|'div' #load from url or div? default:url<br>
+*href:url, #if type is url<br>
+title:'title' #dialog title, default is element context<br>
+dwidth:width #default is auto<br>
+dheight:height #default is auto<br>
+resizable:true<br>
+multi:false #if allow multi dialogs<br>
+prepare:"preparefunction()"<br>
+buttonok:"btnfunc()"<br>
+buttoncancel:"btncancel()"  </p>
+</blockquote>
+
+<p><code>a.ajax</code>  #click to trigger ajax post/get, prepare pointing to prepare function, callback pointing to callback function, callback function first input param is json  </p>
+
+<blockquote>
+<p>*href:url<br>
+target:"#id" #if target id is not null,will write back the json.info result<br>
+method:'POST'|'GET' #default is 'POST'<br>
+data:data, #post data<br>
+prepare:"preparefunction()"<br>
+callback:"callbackfunction(json)"  </p>
+</blockquote>
+
+<p><code>a.iframe</code> #click to load iframe into DIV  </p>
+
+<blockquote>
+<p>*target:"#id"<br>
+*href:url  </p>
+</blockquote>
+
+<p><code>a.div</code> #click to load URL content into DIV  </p>
+
+<blockquote>
+<p>*href:url<br>
+*target:"#id"<br>
+append:false  #true:append to the end;false: empty the div<br>
+ask:'tips'  #if div is not empty, it will alert a tips<br>
+prepare:"preparefunction()"<br>
+callback:"callbackfunction(json)"  </p>
+</blockquote>
+
+<p><code>a.popmenu</code> #click to show pop menu  </p>
+
+<blockquote>
+<p>target:"#id"|".class"  #default .tooltips in the same div level<br>
+onclass:'clicked', //add the class if a is clicked  </p>
+</blockquote>
+
+<p><code>:text.fot</code> #type words limited  </p>
+
+<blockquote>
+<p>target:id<br>
+limit:200  </p>
+</blockquote>
+</blockquote></article>

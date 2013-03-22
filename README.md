@@ -1,6 +1,6 @@
 Webex is a HTML interface jQuery  plugin
 ======
-This framework depends on jQuery 1.4+, only need to run `$('body').compile()` to take effects. DOM elements includes class attribution like `.ajax` or `.load` or `.dialog`  and so on will auto trig to do ajax post, ajax load(auto cross-domain) or show dialog... That's a comfort way to make one webpage ajaxable.
+This framework depends on jQuery 1.4+, only need to run `$('body').compile()` to take effects. DOM elements includes class attribution like `.ajax` or `.load` or `.dialog`  and so on will auto trigger ajax post, ajax load(auto cross-domain) or show dialog... That's a comfort way to make one webpage ajaxable.
 
 compile.js
 ------
@@ -29,8 +29,11 @@ $.webex functions and consts
 > 
 > setting.  
 > > autocompile:false #whether to auto $('body').compile() or not  
-> > crossdomainserver:'http://www.yourdomain.com/jsonp.php' #jsonp cross domain server  
+> > crossdomainserver:'http://www.yourdomain.com/jsonp.php' #jsonp cross domain server script path
 > > LastDialogHandle:handle #pop dialog handle,iframe use the parent to close  
+> > swfinstallpath: 'expressInstall.swf' #flash swf auto installer path, only div.loadswf needed
+> > sessionname: 'PHPSESSID' # cross domain ajax need to get session token from cookie  
+> > ajaxparam: 'isAjax' # cross domain ajax needs this HTTP param to declare whether ajax request or not
 > 
 > action.  
 > > script(json) #on json.status==1 trigger json.script  
@@ -95,11 +98,11 @@ This will auto load into the DIV with the url content after $().compile.
 > > inner form: `<input:submit>`  
 > > > sync:'message',#on submiting the button title will be changed and submit button disabled, after success will restore  
 > 
-> `div.load`  load url content after document is loaded, support different domain  
+> `div.load` `span.load`  load url content after document is loaded, support different domain  
 > > *url:url  
 > > callback:function, #ex: `<div class="load" url="http://domain.com" callback="cb(data)"></div>`  
 > 
-> `div.loadswf` #embed flash into div 
+> `div.loadswf` #embed flash into div, require swfObject.js 
 > > *url:url  
 > > *width:width  
 > > *height:height  
@@ -146,3 +149,8 @@ This will auto load into the DIV with the url content after $().compile.
 > `:text.fot` #type words limited  
 > > target:id  
 > > limit:200  
+
+License
+-------
+This is licensed under the GNU LGPL, version 2.1 or later.  
+* For details, see: http://creativecommons.org/licenses/LGPL/2.1/  

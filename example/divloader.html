@@ -1,0 +1,41 @@
+<script type="text/javascript">
+$(function(){
+	prettyPrint();
+})
+</script>
+<h3>Load page about.html into DIV</h3>
+<pre class="prettyprint linenums">
+&lt;div class="load" url="about.html"&gt;
+  loading...
+&lt;/div&gt;
+</pre>
+
+<div class="load" url="about.html">
+	loading...
+</div>
+
+<hr />
+
+<h3>Load page about.html into DIV with callback</h3>
+<pre class="prettyprint linenums">
+&lt;script&gt;
+$.webex.action.loadback = function (data){
+	$('#loaddiv1').html(data);
+	$('#loadlength').text(data.length);
+}
+&lt;/script&gt;
+&lt;p&gt;The context length is: &lt;em id="loadlength"&gt;&lt;/em&gt;&lt;/p&gt;
+&lt;div id="loaddiv1" class="load" url="about.html" callback="$.webex.action.loadback(data)"&gt;
+	loading...
+&lt;/div&gt;
+</pre>
+<script>
+$.webex.action.loadback = function (data){
+	$('#loaddiv1').html(data);
+	$('#loadlength').text(data.length);
+}
+</script>
+<p>The context length is: <em id="loadlength"></em></p>
+<div id="loaddiv1" class="load" url="about.html" callback="$.webex.action.loadback(data)">
+	loading...
+</div>

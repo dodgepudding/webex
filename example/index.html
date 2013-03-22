@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Webex Examples</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="css/bootstrap.css" rel="stylesheet">
+<link href="css/bootstrap-responsive.css" rel="stylesheet">
+<link href="css/prettify.css" rel="stylesheet">
+<link href="css/idialog.css" rel="stylesheet">
+<script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+<script src="http://code.jquery.com/jquery-migrate-1.1.1.min.js"></script>
+</head>
+<body>
+<div class="container">
+	 <div class="navbar">
+        <div class="navbar-inner">
+          <div class="container">
+            <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </a>
+            <a class="brand" href="https://github.com/dodgepudding/webex">Webex</a>
+            <div class="nav-collapse collapse">
+              <ul id="ex-nav" class="nav">
+                <li class="active"><a href="home.html">Home</a></li>
+                <li><a href="divloader.html">DivLoader</a></li>
+                <li><a href="linkajax.html">LinkAjax</a></li>
+              </ul>
+              <ul class="nav pull-right">
+               	  <li>
+               	  <a href="#">
+			        <iframe class="github-btn" src="http://ghbtns.com/github-btn.html?user=dodgepudding&repo=webex&type=watch&count=true" allowtransparency="true" frameborder="0" scrolling="0" width="80px" height="20px"></iframe>
+			      </a>
+			      </li>
+			      <li>
+			      <a href="#">
+			        <iframe class="github-btn" src="http://ghbtns.com/github-btn.html?user=dodgepudding&repo=webex&type=fork&count=true" allowtransparency="true" frameborder="0" scrolling="0" width="80px" height="20px"></iframe>
+			      </a>
+			      </li>
+              </ul>
+            </div><!--/.nav-collapse -->
+          </div>
+        </div>
+      </div>
+	<div class="row">
+		<div id="ex-content" class="span10 offset1">
+			<div class="load" url="home.html">loading</div>
+		</div>
+	</div>
+</div>
+<footer class="footer">
+	<div class="container">
+			<p> Designed by <a href="http://twitter.com/dodgepudding">@dodgepudding</a> </p>
+			<p>
+			Code licensed under
+			<a target="_blank" href="http://creativecommons.org/licenses/LGPL/2.1/">GNU LGPL V2.1</a> or later
+			, documentation under
+			<a target="_blank" href="http://creativecommons.org/licenses/by/3.0/">CC BY 3.0</a>	.
+			</p>
+	</div>
+</footer>
+<script type="text/javascript">
+$(function(){
+	var chang_nav=function($obj){
+		$('#ex-content').ajaxload($obj.attr('href'),function(data){
+			$('#ex-nav li').removeClass('active');
+			$obj.parent('li').addClass('active');
+		},true);
+	}
+	if (location.hash.indexOf('nav')>0) {
+		var ipage = parseInt(location.hash.replace('#nav',''),10);
+		if (ipage>0)
+			chang_nav($("#ex-nav li:eq("+ipage+") a"));
+	};
+	$('#ex-nav li a').click(function(){
+		var $obj = $(this);
+		chang_nav($obj);
+		location.hash = 'nav'+$obj.parent().index();
+		return false;
+	});
+});
+</script>
+<script src="js/jquery.artDialog.min.js"></script>
+<script src="js/bootstrap-collapse.js"></script>
+<script src="js/bootstrap-dropdown.js"></script>
+<script src="js/prettify.js"></script>
+<script src="../compile.min.js"></script>
+</body>
+</html>

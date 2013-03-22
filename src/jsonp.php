@@ -9,7 +9,7 @@
  * the HTTP request will return json format like:
  * array(status,data) : status enum 1 for success or 0 for failed，data is the response data.
  */
-//配置参数
+
 $sessionname = 'PHPSESSIONID'; //TODO: change your session name here
 
 $jsonp = $_REQUEST['jpback'];

@@ -1,6 +1,6 @@
 /*!
 * webex framework
-* version: v1.0.0
+* version: v1.0.1
 * author: dodge<dodgepudding[at]gmail.com>
 * Date: 2012-07-21
 * requirement:
@@ -11,17 +11,19 @@
 */
 
 (function($){
-
-$.webex = $.webex || {
-	version:"v1.0.0"	
-};
-$.extend($.webex,{
-	setting:{
+$.extend(true,{webex:{}});
+$.extend(true,$.webex,{
+	setting:{},
+	_setting:{
 		autocompile:true,
 		LastDialogHandle:null,
-		crossdomainserver:'http://www.tiao001.com/jsonp.php'
+		ajaxparam:'isAjax',
+		sessionname:'PHPSESSID',
+		crossdomainserver:'/jsonp.php',
+		swfinstallpath:'expressInstall.swf'
 	},
 	init:function(){
+		$.webex.setting = $.extend({},$.webex._setting,$.webex.setting);
 		if ($.webex.setting.autocompile) {
 			$('body').compile();
 			if ($.webex.util.isIOS()) {
@@ -43,7 +45,7 @@ $.extend($.webex,{
 			alert(msg);
 			if (callback) callback();
 		} else
-			$.webex.setting.LastDialogHandle = $.dialog({title:'提示',content:msg,lock:true,time:etime,beforeunload:callback,button: [{value: '确定',callback:callback}]});
+			$.webex.setting.LastDialogHandle = $.dialog({title:'TIPS',content:msg,lock:true,time:etime,beforeunload:callback,button: [{value: 'OK',callback:callback}]});
 	},
 	cookie: function(name, value, options) {
 	    if (typeof value != 'undefined') { // name and value given, set cookie
@@ -102,12 +104,12 @@ $.extend($.webex,{
 		var dialogid = multi?'dialogform'+$.webex.util.crc32(title):'dialogform';
 		var button = [];
 		if (buttonok) button.push({
-			value: '确定',
+			value: 'OK',
 			callback: buttonok,
 			focus: true
 		});
 		if (buttoncancel) button.push({
-			value: '取消',
+			value: 'Cancel',
 			callback: buttoncancel
 		});
 		try{
@@ -374,13 +376,13 @@ $.extend($.webex,{
 				} else 
 				{
 					json.status=0;
-					json.info='请稍等，您的网络出现了小毛病！';
+					json.info='Network error！';
 				}
 				return json;
 			},
 		getAbsUrl:function(url){
 			url = $.trim(url);
-			if (url.indexOf("http://")==0) return url;
+			if (url.indexOf("://")>0) return url;
 			if (url.indexOf("/")==0) return 'http://'+location.host+url;
 			var dt = location.href.split("?")[0].split("/");
 			  dt.length--;
@@ -487,8 +489,8 @@ $.extend($.webex,{
 				nowtmp=new Date();
 				nowtime=nowtmp.getTime();
 			}
-			var outputdate=timestamp.getFullYear()+'年'+(timestamp.getMonth()+1)+'月'+timestamp.getDate()+'日';
-			var outputtime=timestamp.getHours()+'时'+timestamp.getMinutes()+'分'+timestamp.getSeconds()+'秒';
+			var outputdate=timestamp.getFullYear()+'-'+(timestamp.getMonth()+1)+'-'+timestamp.getDate()+' ';
+			var outputtime=timestamp.getHours()+':'+timestamp.getMinutes()+':'+timestamp.getSeconds();
 			if (isNormal)
 			{
 				if (showtime)
@@ -499,15 +501,15 @@ $.extend($.webex,{
 			{
 				delta=Math.ceil((nowtime-timestamp)/1000);
 				if (delta<=0)
-					return '小于1秒';
+					return 'now';
 				if (delta<=60)
-					return (delta-1)+'秒前';
+					return (delta-1)+'secs';
 				if (delta<=3600)
-					return (Math.ceil(delta/60)-1)+'分钟前';
+					return (Math.ceil(delta/60)-1)+'mins';
 				if (delta<=86400)
-					return (Math.ceil(delta/3600)-1)+'小时前';
+					return (Math.ceil(delta/3600)-1)+'hrs';
 				if (delta<=86400*15)
-					return (Math.ceil(delta/86400)-1)+'天前';
+					return (Math.ceil(delta/86400)-1)+'days';
 				else
 					return outputdate; 
 			}
@@ -530,7 +532,7 @@ $.extend($.webex,{
 		addBookmark:function(title,url) 
 		{
 			if($.browser.webkit){ 
-				alert("请用CTRL+D收藏本网页！");
+				alert("press CTRL+D to bookmark！");
 				return true;
 			}
 		    if (window.sidebar){ 
@@ -543,7 +545,6 @@ $.extend($.webex,{
 		        return true;
 		    }
 		},
-		// 复制剪切板
 		copyToClipboard:function(txt) {
 			 if(window.clipboardData) {
 					 window.clipboardData.clearData();
@@ -554,7 +555,7 @@ $.extend($.webex,{
 				  try {
 					   netscape.security.PrivilegeManager.enablePrivilege("UniversalXPConnect");
 				  } catch (e) {
-					   $.webex.alert("你的浏览器安全机制拒绝复制，请手动复制!",5000);
+					   $.webex.alert("Your browser security refused to copy，please copy manually!",5000);
 					   return;
 				  }
 				  var clip = Components.classes['@mozilla.org/widget/clipboard;1'].createInstance(Components.interfaces.nsIClipboard);
@@ -575,29 +576,29 @@ $.extend($.webex,{
 					   return false;
 				  clip.setData(trans,null,clipid.kGlobalClipboard);
 			 }
-			 $.webex.alert("地址已复制到剪切板!",5000);
+			 $.webex.alert("URL has copied to clipboard!",5000);
 		}  
 	},
 	ajax:function(url,type,data,atimeout,callback)
 	{
-		var postdata="isAjax=true";
+		var postdata=$.webex.setting.ajaxparam+"=1";
 		if (!url) return false;
 		url = $.webex.util.getAbsUrl(url);
 		if ( $.isPlainObject(data) )
-			postdata = $.param(data)+"&isAjax=true";
+			postdata = $.param(data)+"&"+$.webex.setting.ajaxparam+"=1";
 		else if (data!=null && data!='') {
 			if (data.charAt(data.length-1)=="&") 
-				postdata = data+"isAjax=true";
+				postdata = data+$.webex.setting.ajaxparam+"=1";
 			else
-				postdata = data+"&isAjax=true";
+				postdata = data+"&"+$.webex.setting.ajaxparam+"=1";
 		}
 		var jphost;
 		if ($.isFunction(atimeout)) {
 			callback = atimeout;
 			atimeout = 5000;
 		}
-		if (typeof usersession=="undefined") usersession="";
-		if (url.indexOf(location.hostname)>0){
+		if (typeof usersession=="undefined") usersession=$.webex.cookie($.webex.setting.sessionname);
+		if (url.indexOf(location.hostname)>0 || location.hostname==''){
 			return $.ajax({
 				url:url,
 				type:type.toUpperCase(),
@@ -617,7 +618,7 @@ $.extend($.webex,{
 					}
 				},
 				error:function(e){
-					//$.webex.alert('服务器繁忙或地址错误，请稍候再试');
+					//$.webex.alert('Server busy');
 				}
 			});
 		} else {
@@ -658,14 +659,14 @@ $.extend($.webex,{
 					} 
 				},
 				error:function(e){
-					//$.webex.alert('服务器繁忙或地址错误，请稍候再试');
+					//$.webex.alert('Server busy');
 				}
 			});
 		}
 	}
 });
 
-// 扩展跨域load
+// cross domain load replace for $.load
 $.fn.ajaxload=function(url,callback,compile){
 	var callid='';
 	$(this).addClass('loading');
@@ -694,9 +695,8 @@ $.fn.ajaxload=function(url,callback,compile){
 $.fn.uncompile = function(){
 	$(this).off(".webex");
 	$(this).removeAttr('compiled');
-}
+};
 
-/* 编译html标签的DOM效果 */
 $.fn.compile = function(options){
 	var obj=$(this);
 	if (obj.attr('compiled')) return false;
@@ -754,9 +754,8 @@ $.fn.compile = function(options){
 
 		swfid=($div.attr('id')?$div.attr('id'):'swfobject')+Math.round(Math.round()*1000000);
 		$div.empty().append('<div id="'+swfid+'"></div>');
-		if (!statichost) statichost='';
 		if (thispath !='')
-			swfobject.embedSWF(thispath, swfid, thiswidth, thisheight, "9.0.0",statichost+"/Public/Js/Common/expressInstall.swf", flashvars,params);
+			swfobject.embedSWF(thispath, swfid, thiswidth, thisheight, "9.0.0",$.webex.setting.swfinstallpath, flashvars,params);
 	});
 	
 	if (onevent)
@@ -980,7 +979,7 @@ $.fn.compile = function(options){
 	return false;
 	});
 	
-	//字数限制初始化
+	//init for the text limits
 	if (obj.find("textarea.fot")) {
 		$(function(){
 			obj.find("textarea.fot").each(function(){
@@ -1000,7 +999,6 @@ $.fn.compile = function(options){
 		});
 	}
 	
-	//字数限制
 	if (onevent)
 	obj.on('keyup.webex mouseup.webex change.webex',"textarea.fot",function(e){
 		var $fot = $(this); 
@@ -1031,7 +1029,7 @@ $.fn.compile = function(options){
 	if (onevent)
 	obj.on('click.webex','a.confirmdel', function(e){
 		var title = $(this).attr('title');
-		title = title ? title : '确定要删除所选项目吗？';
+		title = title ? title : 'confirm to delete？';
 		var cback = $(this).attr('callback');		
 		var id = $(this).data('id');
 		var url = $(this).attr('href');
@@ -1042,7 +1040,7 @@ $.fn.compile = function(options){
 				if( $(this).attr('checked') ) _ids += ','+$(this).data('id');
 			});
 			if( !_ids ){
-				$.webex.alert('请选择项目');
+				$.webex.alert('please select items!');
 				return false;
 			}
 			data = {'id':_ids};
@@ -1051,21 +1049,21 @@ $.fn.compile = function(options){
 		}
 
 		if( !confirm(title) ) return false;
-
-		//console.log(data);
-		$.post(url, data, function(json){
-			//console.log(json);
-			try{
-				eval( cback );
-			}catch(e){}
-		},'json');
-
+		$.webex.ajax(url,'post',data,10000,function(json){
+			if (cback){
+				try{
+					eval(cback);
+				}catch(e){}
+			} else {
+				$.webex.alert(json.info);
+			}
+		});
 		return false;
 	});
 
 	obj.attr('compiled','compiled');
 	return true;
-}// end compile
+};// end compile
 //init
 $($.webex.init);
 })(jQuery);
