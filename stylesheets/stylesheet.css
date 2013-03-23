@@ -374,7 +374,17 @@ Full-Width Styles
   background: #212121;
 }
 
-
+#navs {
+  display: block;
+  padding: 10px;
+  background-color: #0090ff;
+  box-shadow: 0 0 10px rgba(0,0,0,.5);
+  border-radius: 4px;
+  text-align: center;
+  width: 200px;
+  color: #fff;
+  font-weight: 700;
+}
 
 /*******************************************************************************
 Small Device Styles
