@@ -1,0 +1,46 @@
+<script type="text/javascript">
+$(function(){
+	prettyPrint();
+})
+</script>
+<h3>Click to show a simple dialog, dialog content from page about.html</h3>
+<pre class="prettyprint linenums">
+&lt;a class="btn xx-large dialog" href="about.html"&gt;show dialog&lt;/a&gt;
+</pre>
+
+<a class="btn xx-large dialog" href="about.html">show dialog</a>
+<hr />
+
+<h3>Click to show dialog with iframe page</h3>
+<pre class="prettyprint linenums">
+&lt;script&gt;
+$.webex.action.btnok=function () {
+	this.content('You confirm').time(2000);
+    return false;
+}
+$.webex.action.btncancel=function () {
+	this.content('You cancel').time(2000);
+    return false;
+}
+&lt;/script&gt;
+&lt;a title="dialog tips" type="iframe" class="btn xx-large dialog" 
+	dwidth="320px" dheight="360px" 
+	prepare="confirm('show dialog?')"
+	buttonok="$.webex.action.btnok" buttoncancel="$.webex.action.btncancel" 
+	href="http://m.baidu.com"&gt;show baidu&lt;/a&gt;
+</pre>
+<script>
+$.webex.action.btnok=function () {
+	this.content('You confirm').time(2000);
+    return false;
+}
+$.webex.action.btncancel=function () {
+	this.content('You cancel').time(2000);
+    return false;
+}
+</script>
+<a title="dialog tips" type="iframe" class="btn xx-large dialog" 
+	dwidth="320px" dheight="360px" 
+	prepare="confirm('show dialog?')"
+	buttonok="$.webex.action.btnok" buttoncancel="$.webex.action.btncancel" 
+	href="http://m.baidu.com">show baidu</a>
