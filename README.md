@@ -1,4 +1,4 @@
-Webex is a HTML interface jQuery  plugin
+Webex is an HTML convenient interactive plugin with less Javascript 
 ======
 This framework depends on jQuery 1.4+, only need to run `$('body').compile()` to take effects. DOM elements includes class attribution like `.ajax` or `.load` or `.dialog`  and so on will auto trigger ajax post, ajax load(auto cross-domain) or show dialog... That's a comfort way to make one webpage ajaxable.
 
