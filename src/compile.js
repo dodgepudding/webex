@@ -2,7 +2,8 @@
 * webex framework
 * version: v1.0.1
 * author: dodge<dodgepudding[at]gmail.com>
-* Date: 2012-07-21
+* site: http://dodgepudding.github.com/webex
+* Date: 2013-03-21
 * requirement:
 * jQuery 1.4+
 * artDialog 4.0+ refer: https://github.com/aui/artDialog
@@ -20,10 +21,12 @@ $.extend(true,$.webex,{
 		ajaxparam:'isAjax',
 		sessionname:'PHPSESSID',
 		crossdomainserver:'/jsonp.php',
+		ajaxtimeout:0,
 		swfinstallpath:'expressInstall.swf'
 	},
 	init:function(){
 		$.webex.setting = $.extend({},$.webex._setting,$.webex.setting);
+		$.ajaxSetup({timeout:$.webex.setting.ajaxtimeout});
 		if ($.webex.setting.autocompile) {
 			$('body').compile();
 			if ($.webex.util.isIOS()) {
@@ -135,7 +138,7 @@ $.extend(true,$.webex,{
 				button: button
 			});
 		if (type=='url')
-			$$.webex.ajax(param,'get',null,10000,function(data){
+			$$.webex.ajax(param,'get',null,null,function(data){
 				dialoghandle.content(data).position();
 				dialoghandle.dom.content.compile();
 			}); 
@@ -192,30 +195,30 @@ $.extend(true,$.webex,{
 		},
 		success:function(e){
 			if (typeof e.data!='undefined' && typeof e.data.jumpUrl!='undefined' && e.data.jumpUrl!='') {
-				$.webex.alert(e.info,null,function(){location.href=e.data.jumpUrl});
+				$.webex.alert(e.info,null,function(){location.href=e.data.jumpUrl;});
 			} else 
 				$.webex.alert(e.info);
 		},
 		error:function(e){
 			if (typeof e.data!='undefined' && typeof e.data.jumpUrl!='undefined' && e.data.jumpUrl!='') {
-				$.webex.alert(e.info,null,function(){location.href=e.data.jumpUrl});
+				$.webex.alert(e.info,null,function(){location.href=e.data.jumpUrl;});
 			} else 
 				$.webex.alert(e.info);
 		},
 		reload:function(e){
 			if (e.status && typeof e.info!='undefined' && e.info) 
-				{alert(e.info,5000,function(){location.reload()});}
+				{alert(e.info,5000,function(){location.reload();});}
 			else
 				location.reload();
 		}
 	},
 	util:{
-		toJSON: function(value){var f=function(n){return n<10?'0'+n:n};if(typeof Date.prototype.toJSON!=='function'){Date.prototype.toJSON=function(key){return isFinite(this.valueOf())?this.getUTCFullYear()+'-'+f(this.getUTCMonth()+1)+'-'+f(this.getUTCDate())+'T'+f(this.getUTCHours())+':'+f(this.getUTCMinutes())+':'+f(this.getUTCSeconds())+'Z':null};String.prototype.toJSON=Number.prototype.toJSON=Boolean.prototype.toJSON=function(key){return this.valueOf()}}var cx=/[\u0000\u00ad\u0600-\u0604\u070f\u17b4\u17b5\u200c-\u200f\u2028-\u202f\u2060-\u206f\ufeff\ufff0-\uffff]/g,escapable=/[\\\"\x00-\x1f\x7f-\x9f\u00ad\u0600-\u0604\u070f\u17b4\u17b5\u200c-\u200f\u2028-\u202f\u2060-\u206f\ufeff\ufff0-\uffff]/g,gap,indent,meta={'\b':'\\b','\t':'\\t','\n':'\\n','\f':'\\f','\r':'\\r','"':'\\"','\\':'\\\\'},rep;var quote=function(string){escapable.lastIndex=0;return escapable.test(string)?'"'+string.replace(escapable,function(a){var c=meta[a];return typeof c==='string'?c:'\\u'+('0000'+a.charCodeAt(0).toString(16)).slice(-4)})+'"':'"'+string+'"'};var str=function(key,holder){var i,k,v,length,mind=gap,partial,value=holder[key];if(value&&typeof value==='object'&&typeof value.toJSON==='function'){value=value.toJSON(key)}if(typeof rep==='function'){value=rep.call(holder,key,value)}switch(typeof value){case'string':return quote(value);case'number':return isFinite(value)?String(value):'null';case'boolean':case'null':return String(value);case'object':if(!value){return'null'}gap+=indent;partial=[];if(Object.prototype.toString.apply(value)==='[object Array]'){length=value.length;for(i=0;i<length;i+=1){partial[i]=str(i,value)||'null'}v=partial.length===0?'[]':gap?'[\n'+gap+partial.join(',\n'+gap)+'\n'+mind+']':'['+partial.join(',')+']';gap=mind;return v}if(rep&&typeof rep==='object'){length=rep.length;for(i=0;i<length;i+=1){if(typeof rep[i]==='string'){k=rep[i];v=str(k,value);if(v){partial.push(quote(k)+(gap?': ':':')+v)}}}}else{for(k in value){if(Object.prototype.hasOwnProperty.call(value,k)){v=str(k,value);if(v){partial.push(quote(k)+(gap?': ':':')+v)}}}}v=partial.length===0?'{}':gap?'{\n'+gap+partial.join(',\n'+gap)+'\n'+mind+'}':'{'+partial.join(',')+'}';gap=mind;return v}};return str('',{'':value})},
+		toJSON: function(value){var f=function(n){return n<10?'0'+n:n};if(typeof Date.prototype.toJSON!=='function'){Date.prototype.toJSON=function(key){return isFinite(this.valueOf())?this.getUTCFullYear()+'-'+f(this.getUTCMonth()+1)+'-'+f(this.getUTCDate())+'T'+f(this.getUTCHours())+':'+f(this.getUTCMinutes())+':'+f(this.getUTCSeconds())+'Z':null};String.prototype.toJSON=Number.prototype.toJSON=Boolean.prototype.toJSON=function(key){return this.valueOf()}}var cx=/[\u0000\u00ad\u0600-\u0604\u070f\u17b4\u17b5\u200c-\u200f\u2028-\u202f\u2060-\u206f\ufeff\ufff0-\uffff]/g,escapable=/[\\\"\x00-\x1f\x7f-\x9f\u00ad\u0600-\u0604\u070f\u17b4\u17b5\u200c-\u200f\u2028-\u202f\u2060-\u206f\ufeff\ufff0-\uffff]/g,gap,indent,meta={'\b':'\\b','\t':'\\t','\n':'\\n','\f':'\\f','\r':'\\r','"':'\\"','\\':'\\\\'},rep;var quote=function(string){escapable.lastIndex=0;return escapable.test(string)?'"'+string.replace(escapable,function(a){var c=meta[a];return typeof c==='string'?c:'\\u'+('0000'+a.charCodeAt(0).toString(16)).slice(-4)})+'"':'"'+string+'"'};var str=function(key,holder){var i,k,v,length,mind=gap,partial,value=holder[key];if(value&&typeof value==='object'&&typeof value.toJSON==='function'){value=value.toJSON(key)}if(typeof rep==='function'){value=rep.call(holder,key,value)}switch(typeof value){case'string':return quote(value);case'number':return isFinite(value)?String(value):'null';case'boolean':case'null':return String(value);case'object':if(!value){return'null'}gap+=indent;partial=[];if(Object.prototype.toString.apply(value)==='[object Array]'){length=value.length;for(i=0;i<length;i+=1){partial[i]=str(i,value)||'null'}v=partial.length===0?'[]':gap?'[\n'+gap+partial.join(',\n'+gap)+'\n'+mind+']':'['+partial.join(',')+']';gap=mind;return v}if(rep&&typeof rep==='object'){length=rep.length;for(i=0;i<length;i+=1){if(typeof rep[i]==='string'){k=rep[i];v=str(k,value);if(v){partial.push(quote(k)+(gap?': ':':')+v)}}}}else{for(k in value){if(Object.prototype.hasOwnProperty.call(value,k)){v=str(k,value);if(v){partial.push(quote(k)+(gap?': ':':')+v)}}}}v=partial.length===0?'{}':gap?'{\n'+gap+partial.join(',\n'+gap)+'\n'+mind+'}':'{'+partial.join(',')+'}';gap=mind;return v;}};return str('',{'':value})},
 		isIE6: function() {
-			return $.browser.msie && "6.0" == $.browser.version ? !0 : !1
+			return $.browser.msie && "6.0" == $.browser.version ? !0 : !1;
 		},
 		isIOS: function() {
-			return /\((iPhone|iPad|iPod)/i.test(navigator.userAgent)
+			return /\((iPhone|iPad|iPod)/i.test(navigator.userAgent);
 		},
 		fixOrientZoom:function(){
 			var objmeta = document.getElementsByTagName("meta");
@@ -235,7 +238,7 @@ $.extend(true,$.webex,{
 			var b = $.webex.util.trim(b),
 				c = 0,
 				b = b.replace(/[^\x00-\xff]/g, "**").length;
-			return c = parseInt(b / 2) == b / 2 ? b / 2 : parseInt(b / 2) + 0.5
+			return c = parseInt(b / 2) == b / 2 ? b / 2 : parseInt(b / 2) + 0.5;
 		},
 		substring4ChAndEn: function(b, c) {
 			for (var d = b.substring(0, 2 * c); $.webex.util.getStrLength(d) > c;) d = d.substring(0, d.length - 1);
@@ -249,13 +252,13 @@ $.extend(true,$.webex,{
 			return "" == $.trim(b) ? !1 : !0;
 		},
 		isEmail: function(a) {
-			return /^([a-zA-Z0-9_\.\-\+])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/.test(a)
+			return /^([a-zA-Z0-9_\.\-\+])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/.test(a);
 		},
 		isNick: function(a) {
-			return /^[a-zA-Z\d\u4e00-\u9fa5_-]*$/.test(a)
+			return /^[a-zA-Z\d\u4e00-\u9fa5_-]*$/.test(a);
 		},
 		noLink: function(a) {
-			return null == $.match(/(http[s]?:\/\/)?[a-zA-Z0-9-]+(\.[a-zA-Z0-9]+)+/) ? !0 : !1
+			return null == $.match(/(http[s]?:\/\/)?[a-zA-Z0-9-]+(\.[a-zA-Z0-9]+)+/) ? !0 : !1;
 		},
 		getPosition: function(b) {
 			var c = b.offset().top,
@@ -264,69 +267,69 @@ $.extend(true,$.webex,{
 				f = d + b.outerWidth(),
 				g = d + b.outerWidth() / 2,
 				h = c + b.outerHeight() / 2;
-			/iPad/i.test(navigator.userAgent) && (c -= a(window).scrollTop(), e -= a(window).scrollTop(), h -= a(window).scrollTop());
+			if (/iPad/i.test(navigator.userAgent)) {c -= $(window).scrollTop(); e -= $(window).scrollTop(); h -= $(window).scrollTop();}
 			return {
 				leftTop: function() {
 					return {
 						x: d,
 						y: c
-					}
+					};
 				},
 				leftMid: function() {
 					return {
 						x: d,
 						y: h
-					}
+					};
 				},
 				leftBottom: function() {
 					return {
 						x: d,
 						y: e
-					}
+					};
 				},
 				topMid: function() {
 					return {
 						x: g,
 						y: c
-					}
+					};
 				},
 				rightTop: function() {
 					return {
 						x: f,
 						y: c
-					}
+					};
 				},
 				rightMid: function() {
 					return {
 						x: f,
 						y: h
-					}
+					};
 				},
 				rightBottom: function() {
 					return {
 						x: f,
 						y: e
-					}
+					};
 				},
 				MidBottom: function() {
 					return {
 						x: g,
 						y: e
-					}
+					};
 				},
 				middle: function() {
 					return {
 						x: g,
 						y: h
-					}
+					};
 				}
-			}
+			};
 		},
 		getDomain: function(a) {
 			var c = "null",
 				a = /[a-zA-Z0-9][-a-zA-Z0-9]{0,62}(\.[a-zA-Z0-9][-a-zA-Z0-9]{0,62})+\.?/.exec(a);
 			"undefined" != typeof a && null != a && (c = a[0]);
-			return c
+			return c;
 		},
 		goTop:function()
 			{
@@ -354,7 +357,7 @@ $.extend(true,$.webex,{
 		},
 		submitByEnter: function(a, c) {
 			a = a || window.event;
-			13 == (a ? a.charCode || a.keyCode : 0) && c()
+			13 == (a ? a.charCode || a.keyCode : 0) && c();
 		},
 		JsonAction:function(data)
 			{
@@ -595,7 +598,7 @@ $.extend(true,$.webex,{
 		var jphost;
 		if ($.isFunction(atimeout)) {
 			callback = atimeout;
-			atimeout = 5000;
+			atimeout = $.webex.setting.ajaxtimeout;
 		}
 		if (typeof usersession=="undefined") usersession=$.webex.cookie($.webex.setting.sessionname);
 		if (url.indexOf(location.hostname)>0 || location.hostname==''){
@@ -604,7 +607,7 @@ $.extend(true,$.webex,{
 				type:type.toUpperCase(),
 				dataType:"text",
 				data:postdata,
-				timeout: atimeout ? atimeout : 5000,
+				timeout: atimeout===null ? $.webex.setting.ajaxtimeout : atimeout,
 				success:function(data){
 					if ($.isFunction(callback)){ 
 						var json=$.webex.util.JsonAction(data);
@@ -641,7 +644,7 @@ $.extend(true,$.webex,{
 				dataType:"jsonp",
 				data:jsonpdata,
 				jsonp:"jpback",
-				timeout: atimeout ? atimeout : 5000,
+				timeout: atimeout===null ? $.webex.setting.ajaxtimeout : atimeout,
 				success:function(json){
 					if (json.status){
 						if ($.isFunction(callback)) 
@@ -679,7 +682,7 @@ $.fn.ajaxload=function(url,callback,compile){
 	}
 
 	callid='#'+callid;
-	$.webex.ajax(url,'get',null,10000,function(data){
+	$.webex.ajax(url,'get',null,null,function(data){
 		if (!data || data=='undefined'){
 			return false;
 		}
@@ -720,7 +723,7 @@ $.fn.compile = function(options){
 			callid='DG'+Math.floor(Math.random()*1000000);
 			$div.attr('id',callid);
 		}
-		$.webex.ajax(loadurl,'get',null,5000,function(data){
+		$.webex.ajax(loadurl,'get',null,null,function(data){
 			var jsel = $('#'+callid);
 			if (jsel.attr('loadstate')=='loaded') return;
 			if (data){
@@ -786,7 +789,7 @@ $.fn.compile = function(options){
 			else
 				$form.find($form.attr('ajaxmsg')).addClass('loading').show();
 		}
-		$.webex.ajax(this.action,this.method,$form.serialize(),10000,function(json){
+		$.webex.ajax(this.action,this.method,$form.serialize(),null,function(json){
 			if ($form.attr('valid')) $form.attr('valid','false');
 			if (!json.status) 
 			{
@@ -867,7 +870,7 @@ $.fn.compile = function(options){
 		if ($obj.attr('data')) data=$obj.attr('data');
 		aobj=$obj;
 		var gohref=this.href;
-		$.webex.ajax(gohref,method,data,30000,
+		$.webex.ajax(gohref,method,data,null,
 				function(json){
 					if (cback){
 						try{
@@ -929,7 +932,7 @@ $.fn.compile = function(options){
 		}
 		$divtarget.addClass('loading');
 		$divtarget.attr('loadstate','loading');
-		$.webex.ajax(this.href,'get',null,10000,function(data){
+		$.webex.ajax(this.href,'get',null,null,function(data){
 			if ($divtarget.attr('loadstate')=='loaded') return;
 			if (data){
 				$divtarget.removeClass('loading');
@@ -1049,7 +1052,7 @@ $.fn.compile = function(options){
 		}
 
 		if( !confirm(title) ) return false;
-		$.webex.ajax(url,'post',data,10000,function(json){
+		$.webex.ajax(url,'post',data,null,function(json){
 			if (cback){
 				try{
 					eval(cback);
