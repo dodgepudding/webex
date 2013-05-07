@@ -1,34 +1,34 @@
-Webex is a HTML interface jQuery  plugin
+Webex is an HTML convenient interactive plugin with less Javascript 
 ======
-This framework depends on jQuery 1.4+, only need to run `$('body').compile()` to take effects. DOM elements includes class attribution like `.ajax` or `.load` or `.dialog`  and so on will auto trigger ajax post, ajax load(auto cross-domain) or show dialog... That's a comfort way to make one webpage ajaxable.
+This framework depends on jQuery 1.4+, only need `$('body').compile()` to run. DOM elements includes class attribution like `.ajax` or `.load` or `.dialog`  and so on will auto trigger ajax post, ajax load(auto cross-domain) or show dialog... That's a comfort way to make one webpage ajaxable.
 
 compile.js
 ------
-The core js is compile.js, all funtions is in the `$.webex` scope.
+The core js is compile.js, all functions pack in the `$.webex` scope.
 
-If you need float dialog, the frame invoked a third party dialog for default
+If you need float dialog, this frame invoked a third party dialog for default
 https://github.com/aui/artDialog (version 4.0+)
 
-If you need to use you own dialog, please overload the funtions `$.webex.CreateDialog` and `$.webex.CloseDialog`
+If you need to use you own dialog, please overload the functions `$.webex.CreateDialog` and `$.webex.CloseDialog`
 
-If you need ajax crossdomain, you can replace the jqeury ajax $.ajax with $.webex.ajax and replace $.load with $.ajaxload, and put jsonp.php on your server(only for php server nowaday, or you can write an jsonp server yourself). $.webex.ajax will auto detect your request domain whether cross or not.
+If you need ajax crossdomain, you can replace origin jqeury ajax $.ajax with $.webex.ajax and replace $.load with $.ajaxload, and put jsonp.php on your server(only for php server nowaday, or you can write an jsonp server script yourself). $.webex.ajax will auto detect your request domain whether cross or not.
 
 $.webex scope structure
 -------
-`$.webex.setting` basic global settings
+`$.webex.setting` basic global settings, set before compile.
 `$.webex.action` json back action scope
 `$.webex.util` common utilities
 
 $.webex functions and consts
 -------
-###$.bigpu.  
+###$.webex.  
 > alert('message',expired=5000)  
 > CreateDialog('html'|'url'|'iframe',{'<html>'}|{'url'},title,width='auto',height='auto',multi=false,resizable=false,buttonok,buttoncancel)  
 > ajax(url,'POST'|'GET',data="string"|{object},expired,callback="string"|function(json))  
 > cookie(name, [value], [options])  
 > 
 > setting.  
-> > autocompile:false #whether to auto $('body').compile() or not  
+> > autocompile:false #autorun $('body').compile() or not  
 > > crossdomainserver:'http://www.yourdomain.com/jsonp.php' #jsonp cross domain server script path
 > > LastDialogHandle:handle #pop dialog handle,iframe use the parent to close  
 > > swfinstallpath: 'expressInstall.swf' #flash swf auto installer path, only div.loadswf needed
@@ -88,7 +88,7 @@ Example:
 ```html
 <div class="load" url="http://www.domain.com/a.html"></div>
 ```
-This will auto load into the DIV with the url content after $().compile.  
+This will auto load url content into DIV after $().compile.  
 
 > `form.ajax` use ajax to post instead of redirect  
 > > prepare:function, #for validate,submit will break if return false  
@@ -122,7 +122,7 @@ This will auto load into the DIV with the url content after $().compile.
 > > buttonok:"btnfunc()"  
 > > buttoncancel:"btncancel()"  
 > 
-> `a.ajax`  #click to trigger ajax post/get, prepare pointing to prepare function, callback pointing to callback function, callback function first input param is json  
+> `a.ajax`  #click to trigger ajax post/get, prepare attribution declares precall function, callback attribution declares callback function, callback function first input param names json  
 > > *href:url  
 > > target:"#id" #if target id is not null,will write back the json.info result  
 > > method:'POST'|'GET' #default is 'POST'  
@@ -144,7 +144,7 @@ This will auto load into the DIV with the url content after $().compile.
 > 
 > `a.popmenu` #click to show pop menu  
 > > target:"#id"|".class"  #default .tooltips in the same div level  
-> > onclass:'clicked', //add the class if a is clicked  
+> > onclass:'clicked', //add this class if <A> clicked  
 > 
 > `:text.fot` #type words limited  
 > > target:id  

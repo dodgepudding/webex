@@ -1,24 +1,24 @@
-<article class="markdown-body entry-content" itemprop="mainContentOfPage"><h1>
-<a name="webex-is-a-html-interface-jquery--plugin" class="anchor" href="#webex-is-a-html-interface-jquery--plugin"><span class="mini-icon mini-icon-link"></span></a>Introduction</h1>
+<h1>
+<a name="webex-is-an-html-convenient-interactive-plugin-with-less-javascript-" class="anchor" href="#webex-is-an-html-convenient-interactive-plugin-with-less-javascript-"><span class="mini-icon mini-icon-link"></span></a>Webex is an HTML convenient interactive plugin with less Javascript </h1>
 
-<p>This framework depends on jQuery 1.4+, only need to run <code>$('body').compile()</code> to take effects. DOM elements includes class attribution like <code>.ajax</code> or <code>.load</code> or <code>.dialog</code>  and so on will auto trigger ajax post, ajax load(auto cross-domain) or show dialog... That's a comfort way to make one webpage ajaxable.</p>
+<p>This framework depends on jQuery 1.4+, only need <code>$('body').compile()</code> to run. DOM elements includes class attribution like <code>.ajax</code> or <code>.load</code> or <code>.dialog</code>  and so on will auto trigger ajax post, ajax load(auto cross-domain) or show dialog... That's a comfort way to make one webpage ajaxable.</p>
 
 <h2>
 <a name="compilejs" class="anchor" href="#compilejs"><span class="mini-icon mini-icon-link"></span></a>compile.js</h2>
 
-<p>The core js is compile.js, all funtions is in the <code>$.webex</code> scope.</p>
+<p>The core js is compile.js, all functions pack in the <code>$.webex</code> scope.</p>
 
-<p>If you need float dialog, the frame invoked a third party dialog for default
+<p>If you need float dialog, this frame invoked a third party dialog for default
 <a href="https://github.com/aui/artDialog">https://github.com/aui/artDialog</a> (version 4.0+)</p>
 
-<p>If you need to use you own dialog, please overload the funtions <code>$.webex.CreateDialog</code> and <code>$.webex.CloseDialog</code></p>
+<p>If you need to use you own dialog, please overload the functions <code>$.webex.CreateDialog</code> and <code>$.webex.CloseDialog</code></p>
 
-<p>If you need ajax crossdomain, you can replace the jqeury ajax $.ajax with $.webex.ajax and replace $.load with $.ajaxload, and put jsonp.php on your server(only for php server nowaday, or you can write an jsonp server yourself). $.webex.ajax will auto detect your request domain whether cross or not.</p>
+<p>If you need ajax crossdomain, you can replace origin jqeury ajax $.ajax with $.webex.ajax and replace $.load with $.ajaxload, and put jsonp.php on your server(only for php server nowaday, or you can write an jsonp server script yourself). $.webex.ajax will auto detect your request domain whether cross or not.</p>
 
 <h2>
 <a name="webex-scope-structure" class="anchor" href="#webex-scope-structure"><span class="mini-icon mini-icon-link"></span></a>$.webex scope structure</h2>
 
-<p><code>$.webex.setting</code> basic global settings
+<p><code>$.webex.setting</code> basic global settings, set before compile.
 <code>$.webex.action</code> json back action scope
 <code>$.webex.util</code> common utilities</p>
 
@@ -26,7 +26,7 @@
 <a name="webex-functions-and-consts" class="anchor" href="#webex-functions-and-consts"><span class="mini-icon mini-icon-link"></span></a>$.webex functions and consts</h2>
 
 <h3>
-<a name="bigpu" class="anchor" href="#bigpu"><span class="mini-icon mini-icon-link"></span></a>$.bigpu.</h3>
+<a name="webex" class="anchor" href="#webex"><span class="mini-icon mini-icon-link"></span></a>$.webex.</h3>
 
 <blockquote>
 <p>alert('message',expired=5000)<br>
@@ -37,9 +37,12 @@ cookie(name, [value], [options])  </p>
 <p>setting.  </p>
 
 <blockquote>
-<p>autocompile:false #whether to auto $('body').compile() or not<br>
-crossdomainserver:'<a href="http://www.yourdomain.com/jsonp.php">http://www.yourdomain.com/jsonp.php</a>' #jsonp cross domain server<br>
-LastDialogHandle:handle #pop dialog handle,iframe use the parent to close  </p>
+<p>autocompile:false #autorun $('body').compile() or not<br>
+crossdomainserver:'<a href="http://www.yourdomain.com/jsonp.php">http://www.yourdomain.com/jsonp.php</a>' #jsonp cross domain server script path
+LastDialogHandle:handle #pop dialog handle,iframe use the parent to close<br>
+swfinstallpath: 'expressInstall.swf' #flash swf auto installer path, only div.loadswf needed
+sessionname: 'PHPSESSID' # cross domain ajax need to get session token from cookie<br>
+ajaxparam: 'isAjax' # cross domain ajax needs this HTTP param to declare whether ajax request or not</p>
 </blockquote>
 
 <p>action.  </p>
@@ -103,7 +106,7 @@ Example:</p>
 <div class="highlight"><pre><span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">"load"</span> <span class="na">url=</span><span class="s">"http://www.domain.com/a.html"</span><span class="nt">&gt;&lt;/div&gt;</span>
 </pre></div>
 
-<p>This will auto load into the DIV with the url content after $().compile.  </p>
+<p>This will auto load url content into DIV after $().compile.  </p>
 
 <blockquote>
 <p><code>form.ajax</code> use ajax to post instead of redirect  </p>
@@ -120,14 +123,14 @@ inner form: <code>&lt;input:submit&gt;</code>  </p>
 </blockquote>
 </blockquote>
 
-<p><code>div.load</code>  load url content after document is loaded, support different domain  </p>
+<p><code>div.load</code> <code>span.load</code>  load url content after document is loaded, support different domain  </p>
 
 <blockquote>
 <p>*url:url<br>
 callback:function, #ex: <code>&lt;div class="load" url="http://domain.com" callback="cb(data)"&gt;&lt;/div&gt;</code>  </p>
 </blockquote>
 
-<p><code>div.loadswf</code> #embed flash into div </p>
+<p><code>div.loadswf</code> #embed flash into div, require swfObject.js </p>
 
 <blockquote>
 <p>*url:url<br>
@@ -153,7 +156,7 @@ buttonok:"btnfunc()"<br>
 buttoncancel:"btncancel()"  </p>
 </blockquote>
 
-<p><code>a.ajax</code>  #click to trigger ajax post/get, prepare pointing to prepare function, callback pointing to callback function, callback function first input param is json  </p>
+<p><code>a.ajax</code>  #click to trigger ajax post/get, prepare attribution declares precall function, callback attribution declares callback function, callback function first input param names json  </p>
 
 <blockquote>
 <p>*href:url<br>
@@ -186,7 +189,7 @@ callback:"callbackfunction(json)"  </p>
 
 <blockquote>
 <p>target:"#id"|".class"  #default .tooltips in the same div level<br>
-onclass:'clicked', //add the class if a is clicked  </p>
+onclass:'clicked', //add this class if <a> clicked  </a></p>
 </blockquote>
 
 <p><code>:text.fot</code> #type words limited  </p>
@@ -195,4 +198,14 @@ onclass:'clicked', //add the class if a is clicked  </p>
 <p>target:id<br>
 limit:200  </p>
 </blockquote>
-</blockquote></article>
+</blockquote>
+
+<h2>
+<a name="license" class="anchor" href="#license"><span class="mini-icon mini-icon-link"></span></a>License</h2>
+
+<p>This is licensed under the GNU LGPL, version 2.1 or later.  </p>
+
+<ul>
+<li>For details, see: <a href="http://creativecommons.org/licenses/LGPL/2.1/">http://creativecommons.org/licenses/LGPL/2.1/</a><br>
+</li>
+</ul>
