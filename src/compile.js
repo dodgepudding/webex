@@ -921,7 +921,7 @@ $.fn.compile = function(options){
 			catch(e)
 			{}
 		}
-		var callback = $divtarget.attr('callback');
+		var callback = $obj.attr('callback');
 		if ($obj.attr('append')!='true') $divtarget.empty();
 		if ($obj.attr('ask') &&  $divtarget.children().length>0)
 		{
