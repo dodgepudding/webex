@@ -908,79 +908,101 @@ $.fn.compile = function(options){
 		return false;
 	});	
 	
-	if (onevent)
-	obj.on('click.webex','a.div',function(e){
-		var $obj = $(this);
-		var $divtarget=$($obj.attr('target'));
-		if ($obj.attr('prepare'))
-		{
-			try{
-			var re=eval($obj.attr('prepare'));
-			if (!re) return false;
-			}
-			catch(e)
-			{}
-		}
-		var callback = $obj.attr('callback');
-		if ($obj.attr('append')!='true') $divtarget.empty();
-		if ($obj.attr('ask') &&  $divtarget.children().length>0)
-		{
-			if (confirm($obj.attr('ask')))
-				$divtarget.empty();
-			else 
-				return false;
-		}
-		$divtarget.addClass('loading');
-		$divtarget.attr('loadstate','loading');
-		$.webex.ajax(this.href,'get',null,null,function(data){
-			if ($divtarget.attr('loadstate')=='loaded') return;
-			if (data){
-				$divtarget.removeClass('loading');
-				$divtarget.attr('loadstate','loaded');
-				$divtarget.html(data);
-				if (callback) {
-					try{
-						eval(callback);
-					}catch(e){}
-				} else {
-					$divtarget.removeAttr('compiled');
-					$divtarget.compile();
+	if (onevent) {
+		var adivcall = function(obj) {
+			var $obj = $(obj);
+			var $divtarget=$($obj.attr('target'));
+			if ($obj.attr('prepare'))
+			{
+				try{
+				var re=eval($obj.attr('prepare'));
+				if (!re) return false;
 				}
+				catch(e)
+				{}
 			}
-		});
-		return false;
-	});
+			var callback = $obj.attr('callback');
+			if ($obj.attr('append')!='true') $divtarget.empty();
+			if ($obj.attr('ask') &&  $divtarget.children().length>0)
+			{
+				if (confirm($obj.attr('ask')))
+					$divtarget.empty();
+				else 
+					return false;
+			}
+			var callfunc = function(data){
+				if ($divtarget.attr('loadstate')=='loaded') return;
+				if (data){
+					if ($obj.attr('cache')=='true') {
+						 $obj.data('divcache',data);
+					}
+					$divtarget.removeClass('loading');
+					$divtarget.attr('loadstate','loaded');
+					$divtarget.html(data).show();
+					if (callback) {
+						try{
+							eval(callback);
+						}catch(e){}
+					} else {
+						$divtarget.removeAttr('compiled');
+						$divtarget.compile();
+					}
+				}
+			};
+			if ($obj.attr('cache')=='true') {
+				var divcache = $obj.data('divcache');
+				if (typeof divcache!="undefined")  {
+					$divtarget.attr('loadstate','loading');
+					callfunc(divcache);
+					return false;
+				}
+			} 
+			
+			$divtarget.addClass('loading');
+			$divtarget.attr('loadstate','loading');
+			$.webex.ajax(obj.href,'get',null,10000,callfunc);
+			
+			return false;
+		};
+		obj.on('click.webex','a.div',function(e){return 	adivcall(this);});
+		obj.on('mouseenter.webex','a.hoverdiv',function(){return adivcall(this);});
+		obj.on('click.webex','a.hoverdiv',function(){return false;});
+	}
 	
-	if (onevent)
-	obj.on('click.webex','a.popmenu',function(){
-	var $obj = $(this);
-	var popclass=$obj.attr('target')?$obj.attr('target'):'.tooltips';
-	var $pop = $obj.parent().find(popclass);
-	var hoverclass = $obj.attr('onclass');
-	if (hoverclass) $obj.addClass(hoverclass);
-	if ($pop.length<=0) return false;
-	$pop.show().css('z-index',99999).css('position','relative').find('a')
-	.click(function(){
-		$pop.hide();
-	    $obj.parent().find('#popoverlap').remove();
-	    if (hoverclass) $obj.removeClass(hoverclass);
-	});
-	$("<div id='popoverlap' />").css({position:'absolute', 
-	        left:'0px', 
-	        top:'0px', 
-	        background:'#fff',
-	    	opacity:'0.1',
-	        width: $(document).width()+'px', 
-	        height: $(document).height()+'px'})
-	.css("z-index",99998)
-	.appendTo($obj.parent())
-	.click(function(){
-		$pop.hide();
-		$obj.parent().find('#popoverlap').remove();
-		if (hoverclass) $obj.removeClass(hoverclass);
-	});
-	return false;
-	});
+	if (onevent) {
+		var apopmenu = function(obj){
+			var $obj = $(obj);
+			var popclass=$obj.attr('target')?$obj.attr('target'):'.tooltips';
+			var $pop = $obj.parent().find(popclass);
+			var hoverclass = $obj.attr('onclass');
+			if (hoverclass) $obj.addClass(hoverclass);
+			if ($pop.length<=0) return false;
+			$pop.show().css('z-index',99999).css('position','relative').find('a')
+			.click(function(){
+				$pop.hide();
+			    $obj.parent().find('#popoverlap').remove();
+			    if (hoverclass) $obj.removeClass(hoverclass);
+			});
+			$("<div id='popoverlap' />").css({position:'absolute', 
+			        left:'0px', 
+			        top:'0px', 
+			        background:'#fff',
+			    	opacity:'0.1',
+			        width: $(document).width()+'px', 
+			        height: $(document).height()+'px'})
+			.css("z-index",99998)
+			.appendTo($obj.parent())
+			.click(function(){
+				$pop.hide();
+				$obj.parent().find('#popoverlap').remove();
+				if (hoverclass) $obj.removeClass(hoverclass);
+			});
+			return false;
+		};
+		obj.on('click.webex','a.popmenu',function(){return apopmenu(this)});
+		obj.on('mouseenter.webex','a.hovermenu',function(){return apopmenu(this)});
+		obj.on('click.webex','a.hovermenu',function(){return false;});
+	}
 	
 	//init for the text limits
 	if (obj.find("textarea.fot")) {
