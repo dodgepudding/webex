@@ -814,8 +814,17 @@ $.fn.compile = function(options){
 	if (onevent)
 	obj.on('click.webex','a.dialog',function(e){
 		var $obj = $(this);
-		var odialog=$obj.attr('target')? $obj.attr('target'):'#popdiv';
 		var type=($obj.attr('type'))? $obj.attr('type'):'iframe';
+		if ($obj.attr('prepare'))
+		{
+			try{
+			var re=eval($obj.attr('prepare'));
+			if (!re) return false;
+			}
+			catch(e)
+			{}
+		}
+		var odialog=$obj.attr('target')? $obj.attr('target'):'#popdiv';
 		var settitle = $obj.attr('title');
 		if (!settitle) settitle = $obj.text();
 		if (!settitle) settitle = 'Message';
@@ -830,15 +839,6 @@ $.fn.compile = function(options){
 		if ($obj.attr('buttonok')) buttonok=new Function("return "+$obj.attr('buttonok'))();
 		var buttoncancel='';
 		if ($obj.attr('buttoncancel')) buttoncancel=new Function("return "+$obj.attr('buttoncancel'))();
-		if ($obj.attr('prepare'))
-		{
-			try{
-			var re=eval($obj.attr('prepare'));
-			if (!re) return false;
-			}
-			catch(e)
-			{}
-		}
 		if (type == 'url' || type == 'iframe')
 			$.webex.CreateDialog(type,gohref, settitle, setwidth, setheight, ismulti, setresizable, buttonok, buttoncancel);
 		else
@@ -849,7 +849,6 @@ $.fn.compile = function(options){
 	if (onevent)
 	obj.on('click.webex','a.ajax',function(e){
 		var $obj = $(this);
-		var target=$obj.attr('target');
 		if ($obj.attr('prepare'))
 		{
 			try{
@@ -859,6 +858,7 @@ $.fn.compile = function(options){
 			catch(e)
 			{}
 		}
+		var target=$obj.attr('target');
 		var cback='';
 		if ($obj.attr('callback'))
 		{
