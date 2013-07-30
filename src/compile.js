@@ -1,6 +1,6 @@
 /*!
 * webex framework
-* version: v1.0.1
+* version: v1.0.2
 * author: dodge<dodgepudding[at]gmail.com>
 * site: http://dodgepudding.github.com/webex
 * Date: 2013-03-21
@@ -836,9 +836,9 @@ $.fn.compile = function(options){
 		var ismulti = false;
 		if ($obj.attr('multi')) ismulti = true;
 		var buttonok='';
-		if ($obj.attr('buttonok')) buttonok=new Function("return "+$obj.attr('buttonok'))();
+		if ($obj.attr('buttonok')) buttonok=new Function("return "+$obj.attr('buttonok'));
 		var buttoncancel='';
-		if ($obj.attr('buttoncancel')) buttoncancel=new Function("return "+$obj.attr('buttoncancel'))();
+		if ($obj.attr('buttoncancel')) buttoncancel=new Function("return "+$obj.attr('buttoncancel'));
 		if (type == 'url' || type == 'iframe')
 			$.webex.CreateDialog(type,gohref, settitle, setwidth, setheight, ismulti, setresizable, buttonok, buttoncancel);
 		else
