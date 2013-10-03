@@ -18,7 +18,7 @@ $.extend(true,$.webex,{
 	_setting:{
 		autocompile:true,
 		LastDialogHandle:null,
-		ajaxparam:'isAjax',
+		ajaxparam:'ajax',
 		sessionname:'PHPSESSID',
 		crossdomainserver:'/jsonp.php',
 		ajaxtimeout:0,
@@ -29,9 +29,6 @@ $.extend(true,$.webex,{
 		$.ajaxSetup({timeout:$.webex.setting.ajaxtimeout});
 		if ($.webex.setting.autocompile) {
 			$('body').compile();
-			if ($.webex.util.isIOS()) {
-				window.addEventListener("orientationchange", $.webex.util.fixOrientZoom, false); 
-			}
 		}
 	},
 	alert: function(msg,etime,callback)
@@ -207,7 +204,7 @@ $.extend(true,$.webex,{
 		},
 		reload:function(e){
 			if (e.status && typeof e.info!='undefined' && e.info) 
-				{alert(e.info,5000,function(){location.reload();});}
+				{$.webex.alert(e.info,5000,function(){location.reload();});}
 			else
 				location.reload();
 		}
