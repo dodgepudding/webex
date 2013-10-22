@@ -875,7 +875,7 @@ $.fn.compile = function(options){
 						}catch(e){}
 					} else {
 						if (!target) {
-							if (typeof json.info!='undefined' && json.info!='') $.webex.alert(json.info);
+							if (typeof json.info!='undefined' && typeof json.data.action=='undefined' && json.info!='') $.webex.alert(json.info);
 						 }
 						else $(target).html(json.info);
 					}
