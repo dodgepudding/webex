@@ -875,7 +875,7 @@ $.fn.compile = function(options){
 						}catch(e){}
 					} else {
 						if (!target) {
-							if (typeof json.info!='undefined' && typeof json.data.action=='undefined' && json.info!='') $.webex.alert(json.info);
+							if (typeof json.info!='undefined' && json.info!='') $.webex.alert(json.info);
 						 }
 						else $(target).html(json.info);
 					}
@@ -935,13 +935,14 @@ $.fn.compile = function(options){
 					}
 					$divtarget.removeClass('loading');
 					$divtarget.attr('loadstate','loaded');
-					$divtarget.html(data).show();
+					$divtarget.append(data).show();
 					if (callback) {
 						try{
 							eval(callback);
 						}catch(e){}
 					} else {
 						$divtarget.removeAttr('compiled');
+						$divtarget.uncompile();
 						$divtarget.compile();
 					}
 				}
