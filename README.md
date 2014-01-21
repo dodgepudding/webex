@@ -56,6 +56,7 @@ $.webex functions and consts
 > > getPosition(Element)  
 > > getDomain(urlstr)  
 > > selectall(input[name],'#checkbox_id')  
+> > queryParam(key)  
 > > submitByEnter(e,callback)  
 > > goTop()  
 > > JsonAction(data) #json back to call $.webex.action,the callback name declare in json.data.action  

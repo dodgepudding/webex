@@ -352,6 +352,16 @@ $.extend(true,$.webex,{
 				});
 			}
 		},
+		queryParam:function(key){
+		    var URLParams = [];
+		    var Paras = document.location.search.substr(1).split('&');
+		    for(var index = 0 ;index < Paras.length;index++)
+		    {
+		        var Para = Paras[index].split('=');
+		        URLParams[Para[0]] = Para[1];
+		    }
+		    return URLParams[key];
+		},
 		submitByEnter: function(a, c) {
 			a = a || window.event;
 			13 == (a ? a.charCode || a.keyCode : 0) && c();
